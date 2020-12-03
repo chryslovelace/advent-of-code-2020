@@ -2,4 +2,4 @@
 
 Solutions to [Advent of Code 2020](https://adventofcode.com/2020) puzzles in Rust.
 
-Run with `cargo run --bin --day01`.
+Run with `cargo run --bin day01`.
