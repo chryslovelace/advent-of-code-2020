@@ -9,21 +9,11 @@ struct TreeMap {
 }
 
 impl TreeMap {
-    fn tree_at(&self, (x, y): (usize, usize)) -> bool {
-        self.trees.contains(&(x % self.width, y))
-    }
-
     fn trees_encountered(&self, slope: (usize, usize)) -> usize {
-        let mut pos = (0, 0);
-        let mut trees_encountered = 0;
-        while pos.1 < self.height {
-            if self.tree_at(pos) {
-                trees_encountered += 1;
-            }
-            pos.0 += slope.0;
-            pos.1 += slope.1;
-        }
-        trees_encountered
+        std::iter::successors(Some((0, 0)), |pos| Some((pos.0 + slope.0, pos.1 + slope.1)))
+            .take_while(|(_, y)| *y < self.height)
+            .filter(|(x, y)| self.trees.contains(&(x % self.width, *y)))
+            .count()
     }
 }
 
