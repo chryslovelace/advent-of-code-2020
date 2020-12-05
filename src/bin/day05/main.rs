@@ -6,10 +6,8 @@ lazy_static! {
         .lines()
         .map(|line| usize::from_str_radix(
             &line
-                .replace('B', "1")
-                .replace('F', "0")
-                .replace('R', "1")
-                .replace('L', "0"),
+                .replace(&['B', 'R'][..], "1")
+                .replace(&['F', 'L'][..], "0"),
             2,
         )
         .unwrap())
