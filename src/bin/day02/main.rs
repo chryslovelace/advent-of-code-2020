@@ -62,7 +62,7 @@ impl FromStr for Record {
 lazy_static! {
     static ref INPUT: Vec<Record> = include_str!("input.txt")
         .lines()
-        .map(|line| line.parse().unwrap())
+        .flat_map(|line| line.parse())
         .collect();
 }
 

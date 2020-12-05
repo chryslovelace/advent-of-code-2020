@@ -4,7 +4,7 @@ use lazy_static::lazy_static;
 lazy_static! {
     static ref INPUT: Vec<u32> = include_str!("input.txt")
         .lines()
-        .map(|line| line.parse().unwrap())
+        .flat_map(|line| line.parse())
         .collect();
 }
 

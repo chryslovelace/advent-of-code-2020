@@ -81,7 +81,7 @@ lazy_static! {
             Passport {
                 fields: entry
                     .split_whitespace()
-                    .filter_map(|field| field.split(':').map(|s| s.to_owned()).collect_tuple())
+                    .flat_map(|field| field.split(':').map(|s| s.to_owned()).collect_tuple())
                     .collect(),
             }
         })
