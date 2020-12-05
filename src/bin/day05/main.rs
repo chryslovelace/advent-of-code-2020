@@ -2,9 +2,9 @@ use itertools::Itertools;
 use lazy_static::lazy_static;
 
 lazy_static! {
-    static ref SEAT_IDS: Vec<usize> = include_str!("input.txt")
+    static ref SEAT_IDS: Vec<u16> = include_str!("input.txt")
         .lines()
-        .map(|line| usize::from_str_radix(
+        .map(|line| u16::from_str_radix(
             &line
                 .replace(&['B', 'R'][..], "1")
                 .replace(&['F', 'L'][..], "0"),
