@@ -10,10 +10,12 @@ struct TreeMap {
 
 impl TreeMap {
     fn trees_encountered(&self, slope: (usize, usize)) -> usize {
-        std::iter::successors(Some((0, 0)), |pos| Some((pos.0 + slope.0, pos.1 + slope.1)))
-            .take_while(|(_, y)| *y < self.height)
-            .filter(|(x, y)| self.trees.contains(&(x % self.width, *y)))
-            .count()
+        std::iter::successors(Some((0, 0)), |pos| {
+            Some(((pos.0 + slope.0) % self.width, pos.1 + slope.1))
+        })
+        .take_while(|&(_, y)| y < self.height)
+        .filter(|pos| self.trees.contains(pos))
+        .count()
     }
 }
 
