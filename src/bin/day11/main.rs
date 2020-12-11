@@ -1,5 +1,5 @@
 use lazy_static::lazy_static;
-use std::collections::{BTreeMap, hash_map::DefaultHasher};
+use std::collections::{hash_map::DefaultHasher, BTreeMap};
 use std::fmt;
 use std::hash::{Hash, Hasher};
 
@@ -18,11 +18,7 @@ struct Seats {
 
 impl Seats {
     fn is_occupied(&self, x: i32, y: i32) -> bool {
-        if let Some(Seat::Occupied) = self.seats.get(&(x, y)) {
-            true
-        } else {
-            false
-        }
+        matches!(self.seats.get(&(x, y)), Some(Seat::Occupied))
     }
 
     fn occupied_adjacent(&self, x: i32, y: i32) -> u8 {
@@ -37,23 +33,35 @@ impl Seats {
     }
 
     fn next_seats(&self) -> Self {
-        let seats = self.seats.iter().map(|(&(x, y), &seat)| ((x, y), match seat {
-            Seat::Empty if self.occupied_adjacent(x, y) == 0 => Seat::Occupied,
-            Seat::Occupied if self.occupied_adjacent(x, y) >= 4 => Seat::Empty,
-            _ => seat
-        })).collect();
+        let seats = self
+            .seats
+            .iter()
+            .map(|(&(x, y), &seat)| {
+                (
+                    (x, y),
+                    match seat {
+                        Seat::Empty if self.occupied_adjacent(x, y) == 0 => Seat::Occupied,
+                        Seat::Occupied if self.occupied_adjacent(x, y) >= 4 => Seat::Empty,
+                        _ => seat,
+                    },
+                )
+            })
+            .collect();
         Self {
             seats,
             width: self.width,
-            height: self.height
+            height: self.height,
         }
     }
 
     fn count_occupied(&self) -> usize {
-        self.seats.values().filter(|seat| match seat {
-            Seat::Empty => false,
-            Seat::Occupied => true,
-        }).count()
+        self.seats
+            .values()
+            .filter(|seat| match seat {
+                Seat::Empty => false,
+                Seat::Occupied => true,
+            })
+            .count()
     }
 
     fn hash(&self) -> u64 {
@@ -73,7 +81,7 @@ impl fmt::Display for Seats {
                     None => write!(f, ".")?,
                 };
             }
-            write!(f, "\n")?;
+            writeln!(f)?;
         }
         Ok(())
     }
@@ -108,7 +116,9 @@ fn part1() {
     loop {
         seats = seats.next_seats();
         let seats_hash = seats.hash();
-        if seats_hash == last_seats_hash { break; }
+        if seats_hash == last_seats_hash {
+            break;
+        }
         last_seats_hash = seats_hash;
     }
     println!("*   {}", seats.count_occupied());
