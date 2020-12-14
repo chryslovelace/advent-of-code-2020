@@ -66,18 +66,11 @@ fn part1() {
     println!("*   {}", mem.values().sum::<u64>());
 }
 
-fn copy_nth_bit(from: u64, to: &mut u64, n: usize) {
-    *to &= !(1 << n);
-    *to |= ((from >> n) & 1) << n;
-}
-
 fn decode_address(address: u64, mask: &str) -> impl Iterator<Item = u64> {
     let mut addresses = vec![0];
     for (i, c) in mask.chars().rev().enumerate() {
         match c {
-            '0' => addresses
-                .iter_mut()
-                .for_each(|a| copy_nth_bit(address, a, i)),
+            '0' => addresses.iter_mut().for_each(|a| *a += address & (1 << i)),
             '1' => addresses.iter_mut().for_each(|a| *a += 1 << i),
             'X' => {
                 let mut new_addresses = addresses.clone();
