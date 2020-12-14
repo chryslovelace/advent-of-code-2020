@@ -27,16 +27,14 @@ fn part1() {
 
 fn part2() {
     let (_, buses) = &*INPUT;
-    let mut stack: Vec<_> = buses
+    let mut buses = buses
         .iter()
         .enumerate()
-        .flat_map(|(i, bus)| bus.map(|bus| (i as i128, bus as i128)))
-        .collect();
-    stack.sort_by_key(|&(_, bus)| bus);
-    let (idx, bus) = stack.pop().unwrap();
+        .flat_map(|(i, bus)| bus.map(|bus| (i as i128, bus as i128)));
+    let (idx, bus) = buses.next().unwrap();
     let mut timestamp = bus - idx;
     let mut step = bus;
-    while let Some((idx, bus)) = stack.pop() {
+    for (idx, bus) in buses {
         while (timestamp + idx) % bus != 0 {
             timestamp += step;
         }
