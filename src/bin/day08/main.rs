@@ -19,7 +19,7 @@ impl FromStr for Inst {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (inst, arg) = s
             .split_once(' ')
-            .ok_or_else(|| Either::Left(UnrecognizedInstError))?;
+            .ok_or(Either::Left(UnrecognizedInstError))?;
         let arg = arg.parse().map_err(Either::Right)?;
         match inst {
             "acc" => Ok(Inst::Acc(arg)),
@@ -81,7 +81,7 @@ fn run_until_loop_or_termination(program: &[Inst]) -> RunResult {
         }
         emu.step(program);
     }
-    return RunResult::Terminated(emu.acc);
+    RunResult::Terminated(emu.acc)
 }
 
 fn part1() {
