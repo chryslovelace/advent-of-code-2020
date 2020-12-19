@@ -23,6 +23,19 @@ fn part1() {
     println!("*   {}", differences[&1] * differences[&3]);
 }
 
+fn part2() {
+    let mut paths = BTreeMap::new();
+    paths.insert(*BUILT_IN_JOLTAGE, 1usize);
+    for adapter in ADAPTERS.iter().copied().rev().chain(Some(0)) {
+        paths.insert(
+            adapter,
+            (1..=3).filter_map(|i| paths.get(&(adapter + i))).sum(),
+        );
+    }
+    println!("**  {}", paths[&0]);
+}
+
 fn main() {
     part1();
+    part2();
 }
